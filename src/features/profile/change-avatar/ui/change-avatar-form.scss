@@ -1,0 +1,35 @@
+.change-avatar-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  &__picker {
+    position: relative;
+    align-self: center;
+    padding: .25rem .5rem;
+    border-radius: var(--radius-s);
+    font-size: .8125rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--color-accent);
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &:focus-within {
+      outline: var(--focus-ring);
+      outline-offset: 2px;
+    }
+  }
+
+  &__input {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

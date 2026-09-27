@@ -1,0 +1,1 @@
+export { CHATS } from "./mocks";

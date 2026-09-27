@@ -1,0 +1,55 @@
+<main class="page settings-page">
+  <aside class="settings-page__aside">
+    <a 
+      class="settings-page__back" 
+      href="{{backHref}}" 
+      aria-label="Назад"
+    >
+      {{> IconArrow}}
+    </a>
+  </aside>
+
+  <section class="settings-page__content">
+    <button 
+      class="settings-page__avatar" 
+      type="button" 
+      data-modal-open="change-avatar"
+    >
+      {{> Avatar avatarUrl=user.avatar}}
+      <span class="settings-page__avatar-hint">Поменять аватар</span>
+    </button>
+
+    {{#if isEdit}}
+      {{> EditProfileForm user}}
+      {{else if isPassword}}
+        {{> ChangePasswordForm}}
+      {{else}}
+      <h1 class="settings-page__name">{{user.display_name}}</h1>
+      {{> UserInfo user}}
+      <nav class="settings-page__actions">
+        <a 
+          class="settings-page__action" 
+          href="{{route "SETTINGS_EDIT"}}"
+        >
+          Изменить данные
+        </a>
+        <a 
+          class="settings-page__action" 
+          href="{{route "SETTINGS_PASSWORD"}}"
+        >
+          Изменить пароль
+        </a>
+        <a 
+          class="settings-page__action settings-page__action_danger" 
+          href="{{route "LOGIN"}}"
+        >
+          Выйти
+        </a>
+      </nav>
+    {{/if}}
+  </section>
+
+  {{#> Modal id="change-avatar" title="Загрузите файл"}}
+  {{> ChangeAvatarForm}}
+  {{/Modal}}
+</main>

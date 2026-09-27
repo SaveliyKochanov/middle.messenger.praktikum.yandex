@@ -1,0 +1,38 @@
+:root {
+  --color-bg: #0F2137;
+  --color-surface: #f4f4f4;
+  --color-text: #ffffff;
+  --color-text-secondary: #c4c0c0;
+  --color-text-inverse: #0F2137;
+  --color-border: #060c147d;
+  --color-accent: #83FA9D;
+  --color-accent-hover: #31e859;
+
+  --color-on-accent: #060C14;
+  --color-error: #d7263d;
+  --color-backdrop: rgba(0, 0, 0, .4);
+  --color-panel: #060C14;
+  --color-hover: #27426A;
+
+  --color-message-from: #060C14;
+  --color-message-to: #1E334F;
+
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-s: .3125rem;
+  --radius-m: .5rem;
+  --radius-l: .75rem;
+  --radius-xl: .875rem;
+  --radius-full: 999px;
+
+  --focus-ring: 2px solid var(--color-accent);
+  --shadow: 0 0 .375rem rgba(0, 0, 0, .14);
+
+  --sidebar-width: 19.375rem;
+  --sidebar-color: #060C14;
+
+  --color-input: #1E334F;
+
+  --color-chat-item: #1E334F;
+}

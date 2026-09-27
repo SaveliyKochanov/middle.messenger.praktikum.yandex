@@ -1,0 +1,23 @@
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  inline-size: 100%;
+  padding: .5rem .75rem;
+  border-radius: var(--radius-m);
+  font-size: .8125rem;
+  text-align: start;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color .3s ease;
+
+  &:hover {
+    background-color: var(--color-input);
+  }
+
+  &__icon {
+    display: flex;
+    flex-shrink: 0;
+    color: var(--color-accent);
+  }
+}

@@ -1,0 +1,1 @@
+export { initModals } from "./modal";

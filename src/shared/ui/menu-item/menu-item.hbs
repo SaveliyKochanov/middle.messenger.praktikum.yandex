@@ -1,0 +1,10 @@
+<button
+  class="menu-item{{#if className}} {{className}}{{/if}}"
+  type="button"
+  {{#if modal}}data-modal-open="{{modal}}"{{/if}}
+>
+  <span class="menu-item__icon">
+    {{> @partial-block}}
+  </span>
+  {{text}}
+</button>

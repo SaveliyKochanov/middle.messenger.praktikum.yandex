@@ -1,0 +1,15 @@
+<label class="search-field
+  {{#if className}} {{className}}{{/if}}"
+>
+  <span class="search-field__icon">
+    {{> IconSearch}}
+  </span>
+  <input
+    class="search-field__input"
+    type="search"
+    name="{{name}}"
+    placeholder="{{#if placeholder}}{{placeholder}}{{else}}Поиск{{/if}}"
+    {{#if label}}aria-label="{{label}}"{{/if}}
+    autocomplete="off"
+  >
+</label>

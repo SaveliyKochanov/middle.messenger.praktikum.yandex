@@ -1,0 +1,24 @@
+<header class="chat-window-header">
+  <div class="chat-window-header__bio">
+    <div class="chat-window-header__avatar">
+      {{> Avatar avatarUrl=chat.avatarUrl}}
+    </div>
+    <span class="chat-window-header__name">{{chat.title}}</span>
+  </div>
+  <button
+    class="chat-window-header__actions"
+    type="button"
+    popovertarget="chat-actions"
+    aria-label="Действия с чатом"
+  >
+    •••
+  </button>
+  <div 
+    class="chat-window-header__menu" 
+    id="chat-actions" 
+    popover
+  >
+    {{> AddUserButton}}
+    {{> RemoveUserButton}}
+  </div>
+</header>

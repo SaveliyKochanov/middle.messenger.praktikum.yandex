@@ -1,0 +1,33 @@
+<form 
+  class="login-form" 
+  data-redirect="{{route "MESSENGER"}}" 
+  novalidate
+>
+  <h1 class="login-form__title">Вход</h1>
+
+  <div class="login-form__fields">
+    {{> Input 
+      id="login" 
+      name="login" 
+      label="Логин" 
+      autocomplete="username"
+    }}
+    {{> Input 
+      id="password"
+      name="password" 
+      type="password" 
+      label="Пароль" 
+      autocomplete="current-password"
+    }}
+  </div>
+
+  <div class="login-form__actions">
+    {{> Button type="submit" text="Авторизоваться"}}
+    <a 
+      class="login-form__link" 
+      href="{{route "REGISTER"}}"
+    >
+      Нет аккаунта?
+    </a>
+  </div>
+</form>

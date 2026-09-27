@@ -1,0 +1,11 @@
+<form class="edit-profile-form" data-redirect="{{route "SETTINGS"}}" novalidate>
+  <div class="edit-profile-form__fields">
+    {{> Input variant="row" id="email" name="email" type="email" label="Почта" value=email autocomplete="email"}}
+    {{> Input variant="row" id="login" name="login" label="Логин" value=login autocomplete="username"}}
+    {{> Input variant="row" id="first_name" name="first_name" label="Имя" value=first_name autocomplete="given-name"}}
+    {{> Input variant="row" id="second_name" name="second_name" label="Фамилия" value=second_name autocomplete="family-name"}}
+    {{> Input variant="row" id="display_name" name="display_name" label="Имя в чате" value=display_name autocomplete="nickname"}}
+    {{> Input variant="row" id="phone" name="phone" type="tel" label="Телефон" value=phone autocomplete="tel"}}
+  </div>
+  {{> Button type="submit" text="Сохранить" className="edit-profile-form__submit"}}
+</form>

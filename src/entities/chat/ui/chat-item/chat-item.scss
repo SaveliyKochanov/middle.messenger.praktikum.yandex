@@ -1,0 +1,69 @@
+.chat-item {
+  display: flex;
+  padding: .625rem;
+  block-size: 100%;
+  color: inherit;
+  background-color: var(--color-chat-item);
+  transition: background-color .3s ease, box-shadow .3s ease;
+
+  &__bio {
+    flex: 1;
+    min-inline-size: 0;
+    display: flex;
+    gap: .625rem;
+  }
+
+  &__avatar {
+    flex-shrink: 0;
+    inline-size: 3rem;
+    block-size: 3rem;
+  }
+
+  &__message {
+    flex: 1;
+    min-inline-size: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+  }
+
+  &__name {
+    font-size: .875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    font-size: .8125rem;
+    color: var(--color-text-secondary);
+  }
+
+  &__meta {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: .375rem;
+
+    margin: 0 0 0 auto;
+  }
+
+  &__date {
+    font-size: .625rem;
+    color: var(--color-text-secondary);
+  }
+
+  &:hover {
+    background-color: var(--color-hover);
+    box-shadow: inset 3px 0 0 var(--color-accent);
+  }
+}

@@ -1,0 +1,65 @@
+.chat-window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .75rem 1.25rem;
+  border-block-end: 1px solid var(--color-border);
+  background-color: var(--color-panel);
+
+  &__bio {
+    min-inline-size: 0;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+
+  &__avatar {
+    flex-shrink: 0;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+  }
+
+  &__name {
+    font-size: .8125rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__actions {
+    flex-shrink: 0;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-full);
+    font-size: .75rem;
+    letter-spacing: .1em;
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--color-border);
+    }
+  }
+
+  &__menu {
+    position: fixed;
+    inset: 4rem 1.25rem auto auto;
+    margin: 0;
+    padding: .5rem;
+    border: none;
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow);
+    color: var(--color-text);
+    background-color: var(--sidebar-color);
+
+    &:popover-open {
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+    }
+  }
+}
