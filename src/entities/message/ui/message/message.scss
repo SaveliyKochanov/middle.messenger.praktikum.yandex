@@ -1,0 +1,44 @@
+.message {
+  display: flex;
+  flex-direction: column;
+  max-inline-size: 25rem;
+  padding: .6875rem .6875rem .375rem;
+
+  background-color: var(--color-message-from);
+  border-radius: var(--radius-xl);
+  border-top-left-radius: 0;
+
+  &__text {
+    font-size: .75rem;
+    line-height: 150%;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  &__meta {
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+  }
+
+  &__checked {
+    display: flex;
+    color: var(--color-accent);
+  }
+
+  &__time {
+    font-size: .5625rem;
+    line-height: 140%;
+  }
+
+  &_my {
+    background-color: var(--color-message-to);
+    border-radius: var(--radius-xl);
+    border-bottom-right-radius: 0;
+  }
+
+  &_my &__time {
+    color: var(--color-accent);
+  }
+}

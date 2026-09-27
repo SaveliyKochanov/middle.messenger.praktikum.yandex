@@ -1,0 +1,41 @@
+.chat-window-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: .75rem 0 1.25rem;
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: .625rem;
+  }
+
+  &__date {
+    position: sticky;
+    top: .75rem;
+    z-index: 1;
+    align-self: center;
+    padding: .25rem .5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: .625rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    background-color: var(--color-bg);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: .625rem;
+  }
+
+  &__item {
+    display: flex;
+
+    &_my {
+      justify-content: flex-end;
+    }
+  }
+}

@@ -1,0 +1,51 @@
+.message-form {
+  display: flex;
+  gap: .5rem;
+
+  &__send {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: background-color .3s, color .3s;
+  }
+
+  &__field {
+    flex: 1;
+    min-inline-size: 0;
+    block-size: 2.25rem;
+    padding: 0 .75rem;
+    border-radius: var(--radius-full);
+    font-size: .8125rem;
+    background-color: var(--color-input);
+    outline: 1px solid transparent;
+    transition: outline-color .3s ease;
+
+    &::placeholder {
+      color: var(--color-text-secondary);
+    }
+
+    &:hover {
+      outline-color: var(--color-text);
+    }
+
+    &:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 1px;
+    }
+  }
+
+  &__send {
+    color: var(--color-on-accent);
+    background-color: var(--color-accent);
+
+    &:hover {
+      color: var(--color-text-inverse);
+      background-color: var(--color-text);
+    }
+  }
+}

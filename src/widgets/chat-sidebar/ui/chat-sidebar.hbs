@@ -1,0 +1,15 @@
+<article class="chat-sidebar">
+  <header class="chat-sidebar__header">
+    {{> SearchChat}}
+    <a class="chat-sidebar__profile-link" href="{{route "SETTINGS"}}" aria-label="Профиль">
+      {{> IconProfile}}
+    </a>
+  </header>
+  <ul class="chat-sidebar__list">
+    {{#each chats}}
+      <li class="chat-sidebar__item">
+        {{> ChatItem}}
+      </li>
+    {{/each}}
+  </ul>
+</article>

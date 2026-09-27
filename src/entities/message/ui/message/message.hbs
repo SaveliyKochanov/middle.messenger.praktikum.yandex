@@ -1,0 +1,21 @@
+<div class="message 
+    {{#if my}} message_my{{/if}}"
+>
+  <p class="message__text">
+    {{text}}
+  </p>
+  <div class="message__meta">
+    {{#if checked}}
+      <span 
+        class="message__checked" 
+        role="img" 
+        aria-label="Прочитано"
+      >
+        {{> IconChecked}}
+      </span>
+    {{/if}}
+    <time class="message__time">
+      {{time}}
+    </time>
+  </div>
+</div>

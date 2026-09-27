@@ -1,0 +1,30 @@
+<div 
+  class="input
+    {{#if variant}} input_{{variant}}{{/if}}
+    {{#if error}} input_error{{/if}}
+    {{#if className}} {{className}}{{/if}}"
+  >
+  {{#if label}}
+    <label 
+      class="input__label" 
+      for="{{id}}"
+    >
+      {{label}}
+    </label>
+  {{/if}}
+  <input
+    class="input__field"
+    id="{{id}}"
+    name="{{name}}"
+    type="{{#if type}}{{type}}{{else}}text{{/if}}"
+    {{#if value}}value="{{value}}"{{/if}}
+    {{#if placeholder}}placeholder="{{placeholder}}"{{/if}}
+    {{#if autocomplete}}autocomplete="{{autocomplete}}"{{/if}}
+    {{#if required}}required{{/if}}
+    {{#if disabled}}disabled{{/if}}
+    {{#if readonly}}readonly{{/if}}
+  >
+  {{#if error}}
+    <span class="input__error">{{error}}</span>
+  {{/if}}
+</div>

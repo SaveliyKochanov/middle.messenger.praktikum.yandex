@@ -1,0 +1,22 @@
+{
+  "name": "middle-messenger",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "start": "npm run build && vite preview",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "dotenv": "^18.0.4",
+    "sass": "^1.105.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.9"
+  }
+}

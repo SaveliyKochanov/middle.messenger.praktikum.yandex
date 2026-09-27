@@ -1,0 +1,16 @@
+.edit-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  inline-size: 100%;
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__submit {
+    align-self: center;
+    max-inline-size: 17.5rem;
+  }
+}

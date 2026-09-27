@@ -1,0 +1,16 @@
+<section class="chat-window">
+  {{#if chat}}
+    {{> ChatWindowHeader}}
+    <div class="chat-window__messages">
+      {{> ChatWindowMessages}}
+    </div>
+    <footer class="chat-window__footer">
+      {{> AttachFileButton}}
+      {{> MessageForm}}
+    </footer>
+    {{> AddUserModal}}
+    {{> RemoveUserModal}}
+  {{else}}
+    <p class="chat-window__empty">Выберите чат, чтобы отправить сообщение</p>
+  {{/if}}
+</section>

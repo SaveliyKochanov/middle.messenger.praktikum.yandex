@@ -1,0 +1,30 @@
+<a class="chat-item" href="{{route "MESSENGER"}}">
+  <div class="chat-item__bio">
+    <div class="chat-item__avatar">
+      {{> Avatar }}
+    </div>
+    <div class="chat-item__message">
+      <div class="chat-item__name">
+        {{title}}
+      </div>
+      <div class="chat-item__text">
+        {{lastMessage.text}}
+      </div>
+    </div>
+  </div>
+  <div class="chat-item__meta">
+    <time 
+      class="chat-item__date" 
+      datetime="{{lastMessage.time}}"
+    >
+      {{lastMessage.time}}
+    </time>
+    {{#if unreadCount}}
+      {{> Badge
+        value=unreadCount
+        label="непрочитанных"
+        className="chat-item__badge"
+      }}
+    {{/if}}
+  </div>
+</a>

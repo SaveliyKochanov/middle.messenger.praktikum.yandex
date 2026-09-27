@@ -1,0 +1,15 @@
+<div class="chat-window-messages">
+  {{#each groups}}
+  <section class="chat-window-messages__group">
+    <time class="chat-window-messages__date">{{date}}</time>
+    <ul class="chat-window-messages__list">
+      {{#each messages}}
+      <li class="chat-window-messages__item
+          {{#if my}} chat-window-messages__item_my{{/if}}">
+        {{> Message}}
+      </li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/each}}
+</div>

@@ -1,0 +1,17 @@
+<dialog
+  class="modal{{#if className}} {{className}}{{/if}}"
+  id="{{id}}"
+  {{#if title}}aria-labelledby="{{id}}-title"{{/if}}
+>
+  <div class="modal__content">
+    {{#if title}}
+      <h2 
+        class="modal__title" 
+        id="{{id}}-title"
+      >
+        {{title}}
+      </h2>
+    {{/if}}
+    {{> @partial-block}}
+  </div>
+</dialog>

@@ -1,0 +1,59 @@
+<form class="register-form" data-redirect="{{route "MESSENGER"}}" novalidate>
+  <h1 class="register-form__title">Регистрация</h1>
+
+  <div class="register-form__fields">
+    {{> Input
+      id="email"
+      name="email"
+      type="email"
+      label="Почта"
+      autocomplete="email"
+    }}
+    {{> Input
+      id="login"
+      name="login"
+      label="Логин"
+      autocomplete="username"
+    }}
+    {{> Input
+      id="first_name"
+      name="first_name"
+      label="Имя"
+      autocomplete="given-name"
+    }}
+    {{> Input
+      id="second_name"
+      name="second_name"
+      label="Фамилия"
+      autocomplete="family-name"
+    }}
+    {{> Input
+      id="phone"
+      name="phone"
+      type="tel"
+      label="Телефон"
+      autocomplete="tel"
+    }}
+    {{> Input
+      id="password"
+      name="password"
+      type="password"
+      label="Пароль"
+      autocomplete="new-password"
+    }}
+    {{> Input
+      id="password_repeat"
+      name="password_repeat"
+      type="password"
+      label="Пароль (ещё раз)"
+      autocomplete="new-password"
+    }}
+  </div>
+
+  <div class="register-form__actions">
+    {{> Button type="submit" text="Зарегистрироваться"}}
+    <a class="register-form__link" href="{{route "LOGIN"}}">
+      Войти
+    </a>
+  </div>
+</form>
