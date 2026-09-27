@@ -2,7 +2,7 @@
 
 Веб-мессенджер — учебный проект Яндекс Практикума (Middle Frontend).
 
-- Сайт: https://6ab93c1ac11a334165096e0f--clever-fudge-648096.netlify.app/
+- Сайт: https://6ab95297e447e700084c8841--clever-fudge-648096.netlify.app/
 
 ## Стек
 
