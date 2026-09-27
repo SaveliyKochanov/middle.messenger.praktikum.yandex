@@ -19,7 +19,7 @@
     border-radius: var(--radius-full);
     color: var(--color-on-accent);
     background-color: var(--color-accent);
-    transition: background-color .2s ease, color .2s ease;
+    transition: background-color .3s ease, color .3s ease;
 
     svg {
       transform: rotate(180deg);
@@ -71,7 +71,7 @@
     color: var(--color-text);
     background-color: var(--color-backdrop);
     opacity: 0;
-    transition: opacity .2s ease;
+    transition: opacity .3s ease;
   }
 
   &__name {
