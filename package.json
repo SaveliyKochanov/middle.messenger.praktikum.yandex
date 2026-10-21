@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "prebuild": "tsc --noEmit",
     "start": "npm run build && vite preview",
     "preview": "vite preview"
   },
@@ -13,6 +14,7 @@
     "@types/node": "^26.6.3",
     "dotenv": "^18.0.4",
     "sass": "^1.105.0",
+    "ts-node": "^10.9.2",
     "typescript": "~6.0.2",
     "vite": "^8.3.0"
   },
