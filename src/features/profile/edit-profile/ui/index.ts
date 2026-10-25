@@ -1,2 +1,2 @@
 import "./edit-profile-form.scss";
-export { default as EditProfileForm } from "./edit-profile-form.hbs?raw";
+export { EditProfileForm } from "./edit-profile-form";
