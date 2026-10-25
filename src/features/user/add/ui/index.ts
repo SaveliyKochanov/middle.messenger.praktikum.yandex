@@ -1,3 +1,3 @@
-import "./add-user-form.scss";
-export { default as AddUserButton } from "./add-user-button.hbs?raw";
+export { AddUserButton } from "./button";
+export { AddUserForm } from "./form";
 export { default as AddUserModal } from "./add-user-modal.hbs?raw";

@@ -6,7 +6,7 @@
       {{#each messages}}
       <li class="chat-window-messages__item
           {{#if my}} chat-window-messages__item_my{{/if}}">
-        {{> Message}}
+        {{{Message text=text time=time my=my checked=checked}}}
       </li>
       {{/each}}
     </ul>
