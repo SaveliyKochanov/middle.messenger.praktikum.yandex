@@ -1,6 +1,6 @@
-@import url("./reset.scss");
-@import url("./variables.scss");
-@import url("./page.scss");
+@use "./reset";
+@use "./variables";
+@use "./page";
 
 *,
 *::before,
