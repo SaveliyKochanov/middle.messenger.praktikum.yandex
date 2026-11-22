@@ -2,7 +2,7 @@ import Handlebars from "handlebars";
 import "./css/index.scss";
 
 import { ROUTES } from "@/shared/config";
-import { Block, navigate, registerComponent } from "@/shared/lib";
+import { registerComponent, router } from "@/shared/lib";
 
 import {
   Input,
@@ -24,11 +24,12 @@ import {
 
 import { ChatItem } from "@/entities/chat";
 import { Message } from "@/entities/message";
-import { UserInfo } from "@/entities/user";
+import { UserInfo, authController } from "@/entities/user";
 
 import { LoginForm } from "@/features/auth/login";
 import { RegisterForm } from "@/features/auth/register";
 import { SearchChat } from "@/features/chat/search";
+import { CreateChatButton, CreateChatModal, CreateChatForm } from "@/features/chat/create";
 import { MessageForm } from "@/features/chat/send-message";
 import { AttachFileButton } from "@/features/chat/attach-file";
 import { AddUserButton, AddUserModal, AddUserForm } from "@/features/user/add";
@@ -43,7 +44,6 @@ import { MessengerPage } from "@/pages/messenger";
 import { NotFoundPage } from "@/pages/not-found";
 import { SettingsPage } from "@/pages/settings";
 import { ServerErrorPage } from "@/pages/server-error";
-import { NavigationPage } from "@/pages/navigation";
 
 import { ChatSidebar } from "@/widgets/chat-sidebar";
 import { ChatWindow, ChatWindowHeader, ChatWindowMessages } from "@/widgets/chat-window";
@@ -75,6 +75,8 @@ Handlebars.registerPartial("ChatWindowMessages", ChatWindowMessages);
 
 // features
 Handlebars.registerPartial("SearchChat", SearchChat);
+Handlebars.registerPartial("CreateChatButton", CreateChatButton);
+Handlebars.registerPartial("CreateChatModal", CreateChatModal);
 Handlebars.registerPartial("AttachFileButton", AttachFileButton);
 Handlebars.registerPartial("AddUserButton", AddUserButton);
 Handlebars.registerPartial("AddUserModal", AddUserModal);
@@ -95,50 +97,26 @@ registerComponent(MessageForm);
 registerComponent(ChangeAvatarForm);
 registerComponent(AddUserForm);
 registerComponent(RemoveUserForm);
+registerComponent(CreateChatForm);
 
-function getRoot(): HTMLElement {
-  const root = document.querySelector<HTMLElement>("#app");
-
-  if (!root) {
-    throw new Error("Root element #app not found");
-  }
-
-  return root;
-}
-
-const root = getRoot();
-
-const NAVIGATION_LINKS = [
-  { href: ROUTES.LOGIN, text: "Вход" },
-  { href: ROUTES.REGISTER, text: "Регистрация" },
-  { href: ROUTES.MESSENGER, text: "Чаты" },
-  { href: ROUTES.SETTINGS, text: "Профиль" },
-  { href: ROUTES.SETTINGS_EDIT, text: "Изменение данных" },
-  { href: ROUTES.SETTINGS_PASSWORD, text: "Изменение пароля" },
-  { href: ROUTES.NOT_FOUND, text: "404" },
-  { href: ROUTES.SERVER_ERROR, text: "500" },
-];
-
-const pages: Record<string, () => Block<object>> = {
-  "/": () => new NavigationPage({ links: NAVIGATION_LINKS }),
-  [ROUTES.LOGIN]: () => new LoginPage(),
-  [ROUTES.REGISTER]: () => new RegisterPage(),
-  [ROUTES.MESSENGER]: () => new MessengerPage(),
-  [ROUTES.SETTINGS]: () => new SettingsPage({ backHref: ROUTES.MESSENGER }),
-  [ROUTES.SETTINGS_EDIT]: () => new SettingsPage({ isEdit: true, backHref: ROUTES.SETTINGS }),
-  [ROUTES.SETTINGS_PASSWORD]: () => new SettingsPage({ isPassword: true, backHref: ROUTES.SETTINGS }),
-  [ROUTES.SERVER_ERROR]: () => new ServerErrorPage(),
-};
-
-let currentPage: Block<object> | null = null;
-
-function render(path: string) {
-  currentPage?.destroy();
-
-  currentPage = (pages[path] ?? (() => new NotFoundPage()))();
-  const element = currentPage.element();
-  root.replaceChildren(...(element ? [element] : []));
-}
+router
+  .use(ROUTES.LOGIN, LoginPage, { access: "guest" })
+  .use(ROUTES.SIGN_UP, RegisterPage, { access: "guest" })
+  .use(ROUTES.MESSENGER, MessengerPage, { access: "private" })
+  .use(ROUTES.SETTINGS, SettingsPage, {
+    access: "private",
+    props: { backHref: ROUTES.MESSENGER },
+  })
+  .use(ROUTES.SETTINGS_EDIT, SettingsPage, {
+    access: "private",
+    props: { isEdit: true, backHref: ROUTES.SETTINGS },
+  })
+  .use(ROUTES.SETTINGS_PASSWORD, SettingsPage, {
+    access: "private",
+    props: { isPassword: true, backHref: ROUTES.SETTINGS },
+  })
+  .use(ROUTES.NOT_FOUND, NotFoundPage)
+  .use(ROUTES.SERVER_ERROR, ServerErrorPage);
 
 document.addEventListener("click", (event) => {
   if (!(event.target instanceof Element)) {
@@ -152,7 +130,7 @@ document.addEventListener("click", (event) => {
   }
 
   event.preventDefault();
-  navigate(link.pathname);
+  router.go(link.pathname);
 });
 
 document.addEventListener("submit", (event) => {
@@ -165,6 +143,10 @@ document.addEventListener("submit", (event) => {
   event.preventDefault();
 });
 
-window.addEventListener("popstate", () => render(location.pathname));
-
-render(location.pathname);
+authController.fetchUser().then(
+  () => router.start(),
+  () => {
+    router.start();
+    router.go(ROUTES.SERVER_ERROR);
+  },
+);

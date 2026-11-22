@@ -39,12 +39,13 @@
         >
           Изменить пароль
         </a>
-        <a 
-          class="settings-page__action settings-page__action_danger" 
-          href="{{route "LOGIN"}}"
+        <button
+          class="settings-page__action settings-page__action_danger"
+          type="button"
+          ref="logoutButton"
         >
           Выйти
-        </a>
+        </button>
       </nav>
     {{/if}}
   </section>

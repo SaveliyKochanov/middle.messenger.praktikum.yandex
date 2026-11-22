@@ -1,6 +1,7 @@
 <article class="chat-sidebar">
   <header class="chat-sidebar__header">
     {{> SearchChat}}
+    {{> CreateChatButton}}
     <a class="chat-sidebar__profile-link" href="{{route "SETTINGS"}}" aria-label="Профиль">
       {{> IconProfile}}
     </a>
@@ -12,4 +13,5 @@
       </li>
     {{/each}}
   </ul>
+  {{> CreateChatModal}}
 </article>

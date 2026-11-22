@@ -8,6 +8,6 @@ export class EditProfileForm extends Form {
   protected override template = template;
 
   protected override onSubmit(data: FormValues) {
-    userController.updateProfile(data);
+    return userController.updateProfile(data);
   }
 }

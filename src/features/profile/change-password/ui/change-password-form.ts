@@ -8,6 +8,6 @@ export class ChangePasswordForm extends Form {
   protected override template = template;
 
   protected override onSubmit(data: FormValues) {
-    userController.changePassword(data);
+    return userController.changePassword(data);
   }
 }

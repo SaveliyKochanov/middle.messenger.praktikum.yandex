@@ -7,7 +7,14 @@ export class ChangeAvatarForm extends Form {
 
   protected override template = template;
 
-  protected override onSubmit(data: FormValues) {
-    userController.changeAvatar(data);
+  protected override async onSubmit(data: FormValues) {
+    await userController.changeAvatar(data);
+
+    const form = this.element();
+
+    if (form instanceof HTMLFormElement) {
+      form.reset();
+      form.closest("dialog")?.close();
+    }
   }
 }

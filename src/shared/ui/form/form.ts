@@ -1,14 +1,33 @@
-import { Block } from "@/shared/lib";
+import { HTTPError, NetworkError } from "@/shared/api";
+import { Block, ValidationError } from "@/shared/lib";
 import { Input } from "../input";
 
 export type FormValues = Record<string, FormDataEntryValue>;
+
+export function getField(data: FormValues, name: string): string {
+  const value = data[name];
+
+  return typeof value === "string" ? value : "";
+}
+
+function getErrorMessage(error: unknown): string | null {
+  if (error instanceof HTTPError) {
+    return error.reason;
+  }
+
+  if (error instanceof NetworkError || error instanceof ValidationError) {
+    return error.message;
+  }
+
+  return null;
+}
 
 export abstract class Form<Props extends object = object> extends Block<Props> {
   protected override events = {
     submit: (event: Event) => this.handleSubmit(event),
   };
 
-  protected abstract onSubmit(data: FormValues): void;
+  protected abstract onSubmit(data: FormValues): void | Promise<void>;
 
   protected validate(): boolean {
     return this.children
@@ -17,7 +36,15 @@ export abstract class Form<Props extends object = object> extends Block<Props> {
       .every(Boolean);
   }
 
-  private handleSubmit(event: Event) {
+  protected showError(message: string) {
+    const element = this.refs.formError;
+
+    if (element) {
+      element.textContent = message;
+    }
+  }
+
+  private async handleSubmit(event: Event) {
     event.preventDefault();
 
     const form = event.currentTarget;
@@ -30,6 +57,18 @@ export abstract class Form<Props extends object = object> extends Block<Props> {
       return;
     }
 
-    this.onSubmit(Object.fromEntries(new FormData(form)));
+    this.showError("");
+
+    try {
+      await this.onSubmit(Object.fromEntries(new FormData(form)));
+    } catch (error) {
+      const message = getErrorMessage(error);
+
+      if (message === null) {
+        throw error;
+      }
+
+      this.showError(message);
+    }
   }
 }

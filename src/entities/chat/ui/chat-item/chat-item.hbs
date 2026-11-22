@@ -1,4 +1,8 @@
-<a class="chat-item" href="{{route "MESSENGER"}}">
+<button
+  class="chat-item{{#if active}} chat-item_active{{/if}}"
+  type="button"
+  data-chat-id="{{id}}"
+>
   <div class="chat-item__bio">
     <div class="chat-item__avatar">
       {{> Avatar }}
@@ -27,4 +31,4 @@
       }}
     {{/if}}
   </div>
-</a>
+</button>
