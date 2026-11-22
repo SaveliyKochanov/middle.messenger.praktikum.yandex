@@ -1,6 +1,6 @@
 export const ROUTES = {
-  LOGIN: "/login",
-  REGISTER: "/register",
+  LOGIN: "/",
+  SIGN_UP: "/sign-up",
   MESSENGER: "/messenger",
   SETTINGS: "/settings",
   SETTINGS_EDIT: "/settings/edit",

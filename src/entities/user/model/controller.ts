@@ -1,5 +1,5 @@
 import { ROUTES } from "@/shared/config";
-import { navigate } from "@/shared/lib";
+import { router } from "@/shared/lib";
 import type { FormValues } from "@/shared/ui";
 import { userService, type UserFields } from "./service";
 
@@ -10,12 +10,12 @@ class UserController {
 
   public login(data: FormValues) {
     console.log(data);
-    navigate(ROUTES.MESSENGER);
+    router.go(ROUTES.MESSENGER);
   }
 
   public register(data: FormValues) {
     console.log(data);
-    navigate(ROUTES.MESSENGER);
+    router.go(ROUTES.MESSENGER);
   }
 
   public updateProfile(data: FormValues) {
@@ -26,12 +26,12 @@ class UserController {
     );
 
     userService.update(fields);
-    navigate(ROUTES.SETTINGS);
+    router.go(ROUTES.SETTINGS);
   }
 
   public changePassword(data: FormValues) {
     console.log(data);
-    navigate(ROUTES.SETTINGS);
+    router.go(ROUTES.SETTINGS);
   }
 
   public changeAvatar(data: FormValues) {
@@ -43,7 +43,7 @@ class UserController {
       userService.setAvatar(URL.createObjectURL(avatar));
     }
 
-    navigate(ROUTES.SETTINGS);
+    router.go(ROUTES.SETTINGS);
   }
 }
 

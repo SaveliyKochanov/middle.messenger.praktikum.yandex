@@ -1,5 +1,7 @@
 export { openModal } from "./modal";
-export { navigate } from "./navigate";
+export { router, Router } from "./router";
+export type { RouteAccess } from "./router";
+export { render } from "./render-dom";
 export { Block } from "./block";
 export { registerComponent } from "./register-component";
 export { validateField } from "./validation";
