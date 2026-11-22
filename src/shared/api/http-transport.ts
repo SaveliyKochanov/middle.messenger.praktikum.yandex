@@ -10,59 +10,65 @@ const METHODS = {
 
 type Method = (typeof METHODS)[keyof typeof METHODS];
 
-export type QueryParams = Record<string, string | number | boolean | undefined>;
+export type RequestData = Record<string, unknown> | FormData;
 
-export type RequestBody = Record<string, unknown> | unknown[] | FormData;
-
-interface RequestOptions {
+export interface RequestOptions {
   headers?: Record<string, string>;
+  data?: RequestData;
+  responseType?: XMLHttpRequestResponseType;
   timeout?: number;
-}
-
-export interface GetOptions extends RequestOptions {
-  query?: QueryParams;
-}
-
-export interface BodyOptions extends RequestOptions {
-  data?: RequestBody;
 }
 
 interface SendOptions extends RequestOptions {
   method: Method;
-  data?: RequestBody;
 }
 
-const DEFAULT_TIMEOUT = 10000;
+type HTTPMethod = <T>(url: string, options?: RequestOptions) => Promise<T>;
 
-export function queryStringify(query: QueryParams): string {
-  const params = Object.entries(query)
-    .filter(([, value]) => value !== undefined)
-    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
-
-  return params.length > 0 ? `?${params.join("&")}` : "";
-}
-
-function parseResponse(xhr: XMLHttpRequest): unknown {
-  const contentType = xhr.getResponseHeader("Content-Type") ?? "";
-
-  if (contentType.includes("application/json") && xhr.responseText) {
-    return JSON.parse(xhr.responseText);
+export function queryStringify(data: Record<string, unknown>): string {
+  if (typeof data !== "object" || data === null) {
+    throw new Error("Data must be a non-null object");
   }
 
-  return xhr.responseText;
-}
+  const keys = Object.keys(data);
 
-function getErrorReason(response: unknown, fallback: string): string {
-  if (
-    typeof response === "object" &&
-    response !== null &&
-    "reason" in response &&
-    typeof response.reason === "string"
-  ) {
-    return response.reason;
+  if (keys.length === 0) {
+    return "";
   }
 
-  return fallback;
+  return keys.reduce((result, key, index) => {
+    const value = data[key];
+
+    if (value === undefined || value === null) {
+      return result;
+    }
+
+    const encodedKey = encodeURIComponent(key);
+    const encodedValue = encodeURIComponent(String(value));
+
+    const separator = index < keys.length - 1 ? "&" : "";
+
+    return `${result}${encodedKey}=${encodedValue}${separator}`;
+  }, "?");
+}
+
+function getErrorReason(xhr: XMLHttpRequest): string {
+  try {
+    const response: unknown = JSON.parse(xhr.responseText);
+
+    if (
+      typeof response === "object" &&
+      response !== null &&
+      "reason" in response &&
+      typeof response.reason === "string"
+    ) {
+      return response.reason;
+    }
+  } catch {
+    return xhr.responseText || xhr.statusText;
+  }
+
+  return xhr.statusText;
 }
 
 export class HTTPTransport {
@@ -72,71 +78,88 @@ export class HTTPTransport {
     this.baseUrl = `${API_URL}${prefix}`;
   }
 
-  public get<T>(path: string, { query, ...options }: GetOptions = {}): Promise<T> {
-    const url = query ? `${path}${queryStringify(query)}` : path;
-    return this.request<T>(url, { ...options, method: METHODS.GET });
-  }
+  public get: HTTPMethod = (url, options = {}) => {
+    return this.request(url, { ...options, method: METHODS.GET }, options.timeout);
+  };
 
-  public post<T>(path: string, options: BodyOptions = {}): Promise<T> {
-    return this.request<T>(path, { ...options, method: METHODS.POST });
-  }
+  public post: HTTPMethod = (url, options = {}) => {
+    return this.request(url, { ...options, method: METHODS.POST }, options.timeout);
+  };
 
-  public put<T>(path: string, options: BodyOptions = {}): Promise<T> {
-    return this.request<T>(path, { ...options, method: METHODS.PUT });
-  }
+  public put: HTTPMethod = (url, options = {}) => {
+    return this.request(url, { ...options, method: METHODS.PUT }, options.timeout);
+  };
 
-  public delete<T>(path: string, options: BodyOptions = {}): Promise<T> {
-    return this.request<T>(path, { ...options, method: METHODS.DELETE });
-  }
+  public delete: HTTPMethod = (url, options = {}) => {
+    return this.request(url, { ...options, method: METHODS.DELETE }, options.timeout);
+  };
 
-  private request<T>(path: string, options: SendOptions): Promise<T> {
-    const { method, data, headers = {}, timeout = DEFAULT_TIMEOUT } = options;
+  private request = <T>(url: string, options: SendOptions, timeout = 5000): Promise<T> => {
+    const { headers = {}, method, data, responseType } = options;
 
     return new Promise<T>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
+      const isGet = method === METHODS.GET;
+      const fullUrl = `${this.baseUrl}${url}`;
 
-      xhr.open(method, `${this.baseUrl}${path}`);
+      xhr.open(
+        method,
+        isGet && data && !(data instanceof FormData) ? `${fullUrl}${queryStringify(data)}` : fullUrl,
+      );
+
       xhr.withCredentials = true;
-      xhr.timeout = timeout;
 
-      Object.entries(headers).forEach(([name, value]) => {
-        xhr.setRequestHeader(name, value);
+      if (responseType) {
+        xhr.responseType = responseType;
+      }
+
+      Object.keys(headers).forEach((key) => {
+        xhr.setRequestHeader(key, headers[key] as string);
       });
 
       xhr.onload = () => {
-        let response: unknown;
-
-        try {
-          response = parseResponse(xhr);
-        } catch {
-          reject(createHTTPError(xhr.status, "Некорректный ответ сервера"));
-          return;
-        }
-
         if (xhr.status >= 200 && xhr.status < 300) {
-          resolve(response as T);
-          return;
-        }
+          let response: unknown;
 
-        reject(createHTTPError(xhr.status, getErrorReason(response, xhr.statusText)));
+          if (xhr.responseType) {
+            response = xhr.response;
+          } else {
+            try {
+              const contentType = xhr.getResponseHeader("Content-Type");
+              if (contentType && contentType.includes("application/json")) {
+                response = JSON.parse(xhr.responseText);
+              } else {
+                response = xhr.responseText;
+              }
+            } catch {
+              response = xhr.responseText;
+            }
+          }
+
+          resolve(response as T);
+        } else {
+          reject(createHTTPError(xhr.status, getErrorReason(xhr)));
+        }
       };
 
-      xhr.onerror = () => reject(new NetworkError());
       xhr.onabort = () => reject(new NetworkError("Запрос был прерван"));
+
+      xhr.onerror = () => reject(new NetworkError());
+
+      xhr.timeout = timeout;
+
       xhr.ontimeout = () => reject(new TimeoutError());
 
-      if (method === METHODS.GET || data === undefined) {
+      if (isGet || !data) {
         xhr.send();
-        return;
-      }
-
-      if (data instanceof FormData) {
+      } else if (data instanceof FormData) {
         xhr.send(data);
-        return;
+      } else {
+        if (!headers["Content-Type"]) {
+          xhr.setRequestHeader("Content-Type", "application/json");
+        }
+        xhr.send(JSON.stringify(data));
       }
-
-      xhr.setRequestHeader("Content-Type", "application/json");
-      xhr.send(JSON.stringify(data));
     });
-  }
+  };
 }
