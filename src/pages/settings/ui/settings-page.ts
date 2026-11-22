@@ -1,29 +1,32 @@
-import type { User } from "@/entities/user/api";
-import { userController } from "@/entities/user";
-import { Block, openModal } from "@/shared/lib";
+import { authController, selectUser, type User } from "@/entities/user";
+import { Block, connect, openModal } from "@/shared/lib";
 import template from "./settings-page.hbs?raw";
 
 interface Props {
-  user: User;
+  user: User | null;
   backHref: string;
   isEdit?: boolean;
   isPassword?: boolean;
 }
 
-export class SettingsPage extends Block<Props> {
-  constructor(props: Omit<Props, "user">) {
-    super({ ...props, user: userController.getUser() });
-  }
-
+class SettingsPageBase extends Block<Props> {
   protected override template = template;
 
   private handleAvatarClick = () => openModal("change-avatar");
 
+  private handleLogoutClick = () => authController.logout();
+
   protected override componentDidMount() {
     this.refs.avatarButton?.addEventListener("click", this.handleAvatarClick);
+    this.refs.logoutButton?.addEventListener("click", this.handleLogoutClick);
   }
 
   protected override componentWillUnmount() {
     this.refs.avatarButton?.removeEventListener("click", this.handleAvatarClick);
+    this.refs.logoutButton?.removeEventListener("click", this.handleLogoutClick);
   }
 }
+
+const withUser = connect((state) => ({ user: selectUser(state) }));
+
+export const SettingsPage = withUser(SettingsPageBase);

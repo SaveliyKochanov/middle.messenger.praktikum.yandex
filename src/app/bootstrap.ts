@@ -24,11 +24,12 @@ import {
 
 import { ChatItem } from "@/entities/chat";
 import { Message } from "@/entities/message";
-import { UserInfo } from "@/entities/user";
+import { UserInfo, authController } from "@/entities/user";
 
 import { LoginForm } from "@/features/auth/login";
 import { RegisterForm } from "@/features/auth/register";
 import { SearchChat } from "@/features/chat/search";
+import { CreateChatButton, CreateChatModal, CreateChatForm } from "@/features/chat/create";
 import { MessageForm } from "@/features/chat/send-message";
 import { AttachFileButton } from "@/features/chat/attach-file";
 import { AddUserButton, AddUserModal, AddUserForm } from "@/features/user/add";
@@ -74,6 +75,8 @@ Handlebars.registerPartial("ChatWindowMessages", ChatWindowMessages);
 
 // features
 Handlebars.registerPartial("SearchChat", SearchChat);
+Handlebars.registerPartial("CreateChatButton", CreateChatButton);
+Handlebars.registerPartial("CreateChatModal", CreateChatModal);
 Handlebars.registerPartial("AttachFileButton", AttachFileButton);
 Handlebars.registerPartial("AddUserButton", AddUserButton);
 Handlebars.registerPartial("AddUserModal", AddUserModal);
@@ -94,6 +97,7 @@ registerComponent(MessageForm);
 registerComponent(ChangeAvatarForm);
 registerComponent(AddUserForm);
 registerComponent(RemoveUserForm);
+registerComponent(CreateChatForm);
 
 router
   .use(ROUTES.LOGIN, LoginPage, { access: "guest" })
@@ -139,4 +143,10 @@ document.addEventListener("submit", (event) => {
   event.preventDefault();
 });
 
-router.start();
+authController.fetchUser().then(
+  () => router.start(),
+  () => {
+    router.start();
+    router.go(ROUTES.SERVER_ERROR);
+  },
+);

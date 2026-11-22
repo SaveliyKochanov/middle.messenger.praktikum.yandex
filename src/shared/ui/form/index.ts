@@ -1,1 +1,2 @@
-export { Form, type FormValues } from "./form";
+import "./form.scss";
+export { Form, getField, type FormValues } from "./form";

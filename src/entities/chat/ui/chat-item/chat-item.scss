@@ -1,7 +1,9 @@
 .chat-item {
   display: flex;
+  inline-size: 100%;
   padding: .625rem;
   block-size: 100%;
+  text-align: start;
   color: inherit;
   background-color: var(--color-chat-item);
   transition: background-color .3s ease, box-shadow .3s ease;
@@ -61,7 +63,8 @@
     color: var(--color-text-secondary);
   }
 
-  &:hover {
+  &:hover,
+  &_active {
     background-color: var(--color-hover);
     box-shadow: inset 3px 0 0 var(--color-accent);
   }

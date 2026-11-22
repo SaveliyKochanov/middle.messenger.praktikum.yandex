@@ -7,8 +7,8 @@ export class RemoveUserForm extends Form {
 
   protected override template = template;
 
-  protected override onSubmit(data: FormValues) {
-    chatController.removeUser(data);
+  protected override async onSubmit(data: FormValues) {
+    await chatController.removeUser(data);
 
     const form = this.element();
 

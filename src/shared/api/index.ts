@@ -9,3 +9,4 @@ export {
   NetworkError,
   TimeoutError,
 } from "./errors";
+export { handleApiError, redirectOnFatalError } from "./handle-api-error";

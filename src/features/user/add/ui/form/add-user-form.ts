@@ -7,8 +7,8 @@ export class AddUserForm extends Form {
 
   protected override template = template;
 
-  protected override onSubmit(data: FormValues) {
-    chatController.addUser(data);
+  protected override async onSubmit(data: FormValues) {
+    await chatController.addUser(data);
 
     const form = this.element();
 

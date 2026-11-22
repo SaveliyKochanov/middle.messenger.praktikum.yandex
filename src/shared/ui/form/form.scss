@@ -1,0 +1,11 @@
+.form-error {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  color: var(--color-error);
+  text-align: center;
+
+  &:empty {
+    display: none;
+  }
+}
