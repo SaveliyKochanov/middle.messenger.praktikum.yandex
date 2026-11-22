@@ -1,5 +1,6 @@
 export { Input } from "./input";
 export { Button } from "./button";
+export { Form, type FormValues } from "./form";
 export { Avatar } from "./avatar";
 export { Badge } from "./badge";
 export { SearchField } from "./search-field";

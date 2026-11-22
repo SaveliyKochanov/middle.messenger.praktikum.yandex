@@ -1,2 +1,2 @@
 import "./register-form.scss";
-export { default as RegisterForm } from "./register-form.hbs?raw";
+export { RegisterForm } from "./register-form";

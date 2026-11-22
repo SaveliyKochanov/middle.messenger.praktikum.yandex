@@ -1,1 +1,1 @@
-export { AddUserButton, AddUserModal } from "./ui";
+export { AddUserButton, AddUserModal, AddUserForm } from "./ui";

@@ -2,7 +2,7 @@ import Handlebars from "handlebars";
 import "./css/index.scss";
 
 import { ROUTES } from "@/shared/config";
-import { initModals } from "@/shared/lib";
+import { Block, navigate, registerComponent } from "@/shared/lib";
 
 import {
   Input,
@@ -22,20 +22,17 @@ import {
   ErrorScreen
 } from "@/shared/ui";
 
-import { CHATS } from "@/entities/chat/api";
-
 import { ChatItem } from "@/entities/chat";
-import { Message, MESSAGE_GROUPS } from "@/entities/message";
+import { Message } from "@/entities/message";
 import { UserInfo } from "@/entities/user";
-import { USER } from "@/entities/user/api";
 
 import { LoginForm } from "@/features/auth/login";
 import { RegisterForm } from "@/features/auth/register";
 import { SearchChat } from "@/features/chat/search";
 import { MessageForm } from "@/features/chat/send-message";
 import { AttachFileButton } from "@/features/chat/attach-file";
-import { AddUserButton, AddUserModal } from "@/features/user/add";
-import { RemoveUserButton, RemoveUserModal } from "@/features/user/remove";
+import { AddUserButton, AddUserModal, AddUserForm } from "@/features/user/add";
+import { RemoveUserButton, RemoveUserModal, RemoveUserForm } from "@/features/user/remove";
 import { EditProfileForm } from "@/features/profile/edit-profile";
 import { ChangePasswordForm } from "@/features/profile/change-password";
 import { ChangeAvatarForm } from "@/features/profile/change-avatar";
@@ -54,8 +51,6 @@ import { ChatWindow, ChatWindowHeader, ChatWindowMessages } from "@/widgets/chat
 Handlebars.registerHelper("route", (name: keyof typeof ROUTES) => ROUTES[name]);
 
 // shared ui
-Handlebars.registerPartial("Input", Input);
-Handlebars.registerPartial("Button", Button);
 Handlebars.registerPartial("Avatar", Avatar);
 Handlebars.registerPartial("Badge", Badge);
 Handlebars.registerPartial("SearchField", SearchField);
@@ -66,13 +61,10 @@ Handlebars.registerPartial("IconSearch", IconSearch);
 Handlebars.registerPartial("IconProfile", IconProfile);
 Handlebars.registerPartial("IconPlus", IconPlus);
 Handlebars.registerPartial("IconCross", IconCross);
-Handlebars.registerPartial("Modal", Modal);
-Handlebars.registerPartial("MenuItem", MenuItem);
 Handlebars.registerPartial("ErrorScreen", ErrorScreen);
 
 // entities
 Handlebars.registerPartial("ChatItem", ChatItem);
-Handlebars.registerPartial("Message", Message);
 Handlebars.registerPartial("UserInfo", UserInfo);
 
 // widgets
@@ -82,18 +74,27 @@ Handlebars.registerPartial("ChatWindowHeader", ChatWindowHeader);
 Handlebars.registerPartial("ChatWindowMessages", ChatWindowMessages);
 
 // features
-Handlebars.registerPartial("LoginForm", LoginForm);
-Handlebars.registerPartial("RegisterForm", RegisterForm);
 Handlebars.registerPartial("SearchChat", SearchChat);
-Handlebars.registerPartial("MessageForm", MessageForm);
-Handlebars.registerPartial("EditProfileForm", EditProfileForm);
-Handlebars.registerPartial("ChangePasswordForm", ChangePasswordForm);
-Handlebars.registerPartial("ChangeAvatarForm", ChangeAvatarForm);
 Handlebars.registerPartial("AttachFileButton", AttachFileButton);
 Handlebars.registerPartial("AddUserButton", AddUserButton);
 Handlebars.registerPartial("AddUserModal", AddUserModal);
 Handlebars.registerPartial("RemoveUserButton", RemoveUserButton);
 Handlebars.registerPartial("RemoveUserModal", RemoveUserModal);
+
+// block components
+registerComponent(Input);
+registerComponent(Button);
+registerComponent(Modal);
+registerComponent(MenuItem);
+registerComponent(Message);
+registerComponent(LoginForm);
+registerComponent(RegisterForm);
+registerComponent(EditProfileForm);
+registerComponent(ChangePasswordForm);
+registerComponent(MessageForm);
+registerComponent(ChangeAvatarForm);
+registerComponent(AddUserForm);
+registerComponent(RemoveUserForm);
 
 function getRoot(): HTMLElement {
   const root = document.querySelector<HTMLElement>("#app");
@@ -118,27 +119,25 @@ const NAVIGATION_LINKS = [
   { href: ROUTES.SERVER_ERROR, text: "500" },
 ];
 
-const pages: Record<string, () => string> = {
-  "/": () => NavigationPage({ links: NAVIGATION_LINKS }),
-  [ROUTES.LOGIN]: () => LoginPage({}),
-  [ROUTES.REGISTER]: () => RegisterPage({}),
-  [ROUTES.MESSENGER]: () => MessengerPage({ chats: CHATS, chat: CHATS[0], groups: MESSAGE_GROUPS }),
-  [ROUTES.SETTINGS]: () => SettingsPage({ user: USER, backHref: ROUTES.MESSENGER }),
-  [ROUTES.SETTINGS_EDIT]: () => SettingsPage({ user: USER, isEdit: true, backHref: ROUTES.SETTINGS }),
-  [ROUTES.SETTINGS_PASSWORD]: () => SettingsPage({ user: USER, isPassword: true, backHref: ROUTES.SETTINGS }),
-  [ROUTES.SERVER_ERROR]: () => ServerErrorPage({}),
+const pages: Record<string, () => Block<object>> = {
+  "/": () => new NavigationPage({ links: NAVIGATION_LINKS }),
+  [ROUTES.LOGIN]: () => new LoginPage(),
+  [ROUTES.REGISTER]: () => new RegisterPage(),
+  [ROUTES.MESSENGER]: () => new MessengerPage(),
+  [ROUTES.SETTINGS]: () => new SettingsPage({ backHref: ROUTES.MESSENGER }),
+  [ROUTES.SETTINGS_EDIT]: () => new SettingsPage({ isEdit: true, backHref: ROUTES.SETTINGS }),
+  [ROUTES.SETTINGS_PASSWORD]: () => new SettingsPage({ isPassword: true, backHref: ROUTES.SETTINGS }),
+  [ROUTES.SERVER_ERROR]: () => new ServerErrorPage(),
 };
 
-function render(path: string) {
-  const page = pages[path] ?? (() => NotFoundPage({}));
-  root.innerHTML = page();
-}
+let currentPage: Block<object> | null = null;
 
-function navigate(path: string) {
-  if (path !== location.pathname) {
-    history.pushState({}, "", path);
-  }
-  render(path);
+function render(path: string) {
+  currentPage?.destroy();
+
+  currentPage = (pages[path] ?? (() => new NotFoundPage()))();
+  const element = currentPage.element();
+  root.replaceChildren(...(element ? [element] : []));
 }
 
 document.addEventListener("click", (event) => {
@@ -164,13 +163,8 @@ document.addEventListener("submit", (event) => {
   }
 
   event.preventDefault();
-
-  if (form.dataset.redirect) {
-    navigate(form.dataset.redirect);
-  }
 });
 
 window.addEventListener("popstate", () => render(location.pathname));
 
-initModals();
 render(location.pathname);

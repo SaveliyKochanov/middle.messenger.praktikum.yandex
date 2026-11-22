@@ -1,28 +1,24 @@
-<form 
-  class="login-form" 
-  data-redirect="{{route "MESSENGER"}}" 
-  novalidate
->
+<form class="login-form" novalidate>
   <h1 class="login-form__title">Вход</h1>
 
   <div class="login-form__fields">
-    {{> Input 
+    {{{Input 
       id="login" 
       name="login" 
       label="Логин" 
       autocomplete="username"
-    }}
-    {{> Input 
+    }}}
+    {{{Input 
       id="password"
       name="password" 
       type="password" 
       label="Пароль" 
       autocomplete="current-password"
-    }}
+    }}}
   </div>
 
   <div class="login-form__actions">
-    {{> Button type="submit" text="Авторизоваться"}}
+    {{{Button type="submit" text="Авторизоваться"}}}
     <a 
       class="login-form__link" 
       href="{{route "REGISTER"}}"

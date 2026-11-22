@@ -13,16 +13,16 @@
     <button 
       class="settings-page__avatar" 
       type="button" 
-      data-modal-open="change-avatar"
+      ref="avatarButton"
     >
       {{> Avatar avatarUrl=user.avatar}}
       <span class="settings-page__avatar-hint">Поменять аватар</span>
     </button>
 
     {{#if isEdit}}
-      {{> EditProfileForm user}}
+      {{{EditProfileForm user=user}}}
       {{else if isPassword}}
-        {{> ChangePasswordForm}}
+        {{{ChangePasswordForm}}}
       {{else}}
       <h1 class="settings-page__name">{{user.display_name}}</h1>
       {{> UserInfo user}}
@@ -49,7 +49,7 @@
     {{/if}}
   </section>
 
-  {{#> Modal id="change-avatar" title="Загрузите файл"}}
-  {{> ChangeAvatarForm}}
+  {{#Modal id="change-avatar" title="Загрузите файл"}}
+  {{{ChangeAvatarForm}}}
   {{/Modal}}
 </main>

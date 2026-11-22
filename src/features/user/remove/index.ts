@@ -1,1 +1,1 @@
-export { RemoveUserButton, RemoveUserModal } from "./ui";
+export { RemoveUserButton, RemoveUserModal, RemoveUserForm } from "./ui";
